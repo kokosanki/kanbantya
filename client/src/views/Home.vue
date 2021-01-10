@@ -1,27 +1,53 @@
 <template>
-  <div class="row">
+  <div class="ma-10 row d-flex justify-space-between">
     <div class="col-3">
-      <h3>Draggable 1</h3>
-      <draggable class="list-group" :list="list1" group="people" @change="log">
+      <h3>Todos</h3>
+      <draggable class="list-group" :list="todos" group="people" @change="log">
         <div
           class="list-group-item"
-          v-for="(element, index) in list1"
-          :key="element.name"
+          v-for="(element, index) in todos"
+          :key="element.title"
         >
-          {{ element.name }} {{ index }}
+          {{ element.title }} {{ index }} {{element.description}}
         </div>
       </draggable>
     </div>
 
     <div class="col-3">
-      <h3>Draggable 2</h3>
-      <draggable class="list-group" :list="list2" group="people" @change="log">
+      <h3>In progress</h3>
+      <draggable class="list-group" :list="inProgress" group="people" @change="log">
         <div
           class="list-group-item"
-          v-for="(element, index) in list2"
-          :key="element.name"
+          v-for="(element, index) in inProgress"
+          :key="element.title"
         >
-          {{ element.name }} {{ index }}
+          {{ element.title }} {{ index }}
+        </div>
+      </draggable>
+    </div>
+
+    <div class="col-3">
+      <h3>Blocked</h3>
+      <draggable class="list-group" :list="blocked" group="people" @change="log">
+        <div
+          class="list-group-item"
+          v-for="(element, index) in blocked"
+          :key="element.title"
+        >
+          {{ element.title }} {{ index }}
+        </div>
+      </draggable>
+    </div>
+
+    <div class="col-3">
+      <h3>Done</h3>
+      <draggable class="list-group" :list="done" group="people" @change="log">
+        <div
+          class="list-group-item"
+          v-for="(element, index) in done"
+          :key="element.title"
+        >
+          {{ element.title }} {{ index }}
         </div>
       </draggable>
     </div>
@@ -39,29 +65,39 @@ export default {
   },
   data () {
     return {
-      list1: [
-        { name: 'John', id: 1 },
-        { name: 'Joao', id: 2 },
-        { name: 'Jean', id: 3 },
-        { name: 'Gerard', id: 4 }
+      todos: [
+        { title: 'John', description: 'sth', id: 1 },
+        { title: 'Jean', description: 'sth', id: 3 },
+        { title: 'Gerard', description: 'sth', id: 4 },
+        { title: 'Joao', description: 'sth', id: 2 }
       ],
-      list2: [
-        { name: 'Juan', id: 5 },
-        { name: 'Edgard', id: 6 },
-        { name: 'Johnson', id: 7 }
+      inProgress: [
+        { title: 'Juan', id: 5 },
+        { title: 'Edgard', id: 6 },
+        { title: 'Johnson', id: 7 }
+      ],
+      blocked: [
+        { title: 'Juan', id: 11 },
+        { title: 'Edgard', id: 12 },
+        { title: 'Johnson', id: 13 }
+      ],
+      done: [
+        { title: 'Anny', id: 8 },
+        { title: 'Barbara', id: 9 },
+        { title: 'Tammy', id: 10 }
       ]
     }
   },
   methods: {
     add: function () {
-      this.list.push({ name: 'Juan' })
+      this.list.push({ title: 'Juan' })
     },
     replace: function () {
-      this.list = [{ name: 'Edgard' }]
+      this.list = [{ title: 'Edgard' }]
     },
     clone: function (el) {
       return {
-        name: el.name + ' cloned'
+        title: el.title + ' cloned'
       }
     },
     log: function (evt) {
@@ -70,3 +106,15 @@ export default {
   }
 }
 </script>
+<style>
+.list-group-item {
+  cursor: pointer;
+  border-radius: 5%;
+  padding: 5px;
+  margin-bottom: 5px;
+  background-color: pink;
+}
+.list-group-item:active {
+  cursor: grabbing;
+}
+</style>
