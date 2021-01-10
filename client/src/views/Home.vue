@@ -21,7 +21,7 @@
           v-for="(element, index) in inProgress"
           :key="element.title"
         >
-          {{ element.title }} {{ index }}
+          {{ element.title }} {{ index }} {{element.description}}
         </div>
       </draggable>
     </div>
@@ -34,7 +34,7 @@
           v-for="(element, index) in blocked"
           :key="element.title"
         >
-          {{ element.title }} {{ index }}
+          {{ element.title }} {{ index }} {{element.description}}
         </div>
       </draggable>
     </div>
@@ -47,7 +47,7 @@
           v-for="(element, index) in done"
           :key="element.title"
         >
-          {{ element.title }} {{ index }}
+          {{ element.title }} {{ index }} {{element.description}}
         </div>
       </draggable>
     </div>
@@ -66,25 +66,16 @@ export default {
   data () {
     return {
       todos: [
-        { title: 'John', description: 'sth', id: 1 },
-        { title: 'Jean', description: 'sth', id: 3 },
-        { title: 'Gerard', description: 'sth', id: 4 },
-        { title: 'Joao', description: 'sth', id: 2 }
+        { title: 'John', description: 'sth' },
+        { title: 'Jean', description: 'sth' },
+        { title: 'Gerard', description: 'sth' },
+        { title: 'Joao', description: 'sth' }
       ],
       inProgress: [
-        { title: 'Juan', id: 5 },
-        { title: 'Edgard', id: 6 },
-        { title: 'Johnson', id: 7 }
       ],
       blocked: [
-        { title: 'Juan', id: 11 },
-        { title: 'Edgard', id: 12 },
-        { title: 'Johnson', id: 13 }
       ],
       done: [
-        { title: 'Anny', id: 8 },
-        { title: 'Barbara', id: 9 },
-        { title: 'Tammy', id: 10 }
       ]
     }
   },
