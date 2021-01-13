@@ -13,9 +13,10 @@
     </v-app-bar>
 
     <v-main>
-      <Home />
+      <Home :todos.sync="tasksList" />
       <create-task-modal
       @close="closeCreateTaskModal"
+      @createNewTask="createNewTask"
       :active="isCreateTaskModalOpen"/>
     </v-main>
   </v-app>
@@ -29,7 +30,12 @@ export default {
   name: 'App',
   components: { Home, createTaskModal },
   data: () => ({
-    isCreateTaskModalOpen: false
+    isCreateTaskModalOpen: false,
+    tasksList: [
+      { title: 'Jean', description: 'sth' },
+      { title: 'Gerard', description: 'sth' },
+      { title: 'Joao', description: 'sth' }
+    ]
   }),
   methods: {
     createTask () {
@@ -40,6 +46,9 @@ export default {
     },
     closeCreateTaskModal () {
       this.isCreateTaskModalOpen = false
+    },
+    createNewTask (title, description) {
+      this.tasksList.push({ title: title, description: description })
     }
   }
 }

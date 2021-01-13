@@ -60,17 +60,17 @@ import draggable from 'vuedraggable'
 export default {
   display: 'Two Lists',
   order: 1,
+  props: {
+    todos: {
+      type: Array,
+      required: true
+    }
+  },
   components: {
     draggable
   },
   data () {
     return {
-      todos: [
-        { title: 'John', description: 'sth' },
-        { title: 'Jean', description: 'sth' },
-        { title: 'Gerard', description: 'sth' },
-        { title: 'Joao', description: 'sth' }
-      ],
       inProgress: [
       ],
       blocked: [

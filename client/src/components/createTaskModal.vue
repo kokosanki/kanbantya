@@ -14,12 +14,11 @@
             <v-row>
               <v-col
                 cols="12"
-                sm="6"
-                md="4"
               >
                 <v-text-field
                   label="Task title"
                   required
+                  v-model="newTaskTitle"
                 ></v-text-field>
               </v-col>
 
@@ -27,6 +26,7 @@
                 <v-text-field
                   label="Task description"
                   required
+                  v-model="newTaskDescription"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -62,12 +62,17 @@ export default {
       required: true
     }
   },
+  data: () => ({
+    newTaskTitle: null,
+    newTaskDescription: null
+  }),
   methods: {
     closeModal () {
       this.$emit('close')
     },
     createTask () {
-      console.log('ok')
+      this.$emit('createNewTask', this.newTaskTitle, this.newTaskDescription)
+      this.closeModal()
     }
   }
 }
