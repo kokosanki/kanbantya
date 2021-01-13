@@ -80,17 +80,6 @@ export default {
     }
   },
   methods: {
-    add: function () {
-      this.list.push({ title: 'Juan' })
-    },
-    replace: function () {
-      this.list = [{ title: 'Edgard' }]
-    },
-    clone: function (el) {
-      return {
-        title: el.title + ' cloned'
-      }
-    },
     log: function (evt) {
       window.console.log(evt)
     }
