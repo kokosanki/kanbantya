@@ -2,20 +2,21 @@
   <div class="ma-10 row d-flex justify-space-between">
     <div class="col-3">
       <h3>Todos</h3>
-      <draggable class="list-group" :list="todos" group="people" @change="log">
+      <draggable class="list-group" :list="todos" group="tasks" @change="log">
         <div
           class="list-group-item"
           v-for="(element, index) in todos"
-          :key="element.title"
+          :key="element._id"
         >
           {{ element.title }} {{ index }} {{element.description}}
+           <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
         </div>
       </draggable>
     </div>
 
     <div class="col-3">
       <h3>In progress</h3>
-      <draggable class="list-group" :list="inProgress" group="people" @change="log">
+      <draggable @end="add" class="list-group" :list="inProgress" group="tasks" @change="log">
         <div
           class="list-group-item"
           v-for="(element, index) in inProgress"
@@ -28,7 +29,7 @@
 
     <div class="col-3">
       <h3>Blocked</h3>
-      <draggable class="list-group" :list="blocked" group="people" @change="log">
+      <draggable class="list-group" :list="blocked" group="tasks" @change="log">
         <div
           class="list-group-item"
           v-for="(element, index) in blocked"
@@ -41,7 +42,7 @@
 
     <div class="col-3">
       <h3>Done</h3>
-      <draggable class="list-group" :list="done" group="people" @change="log">
+      <draggable class="list-group" :list="done" group="tasks" @change="log">
         <div
           class="list-group-item"
           v-for="(element, index) in done"
@@ -56,6 +57,7 @@
 </template>
 <script>
 import draggable from 'vuedraggable'
+import axios from 'axios'
 
 export default {
   display: 'Two Lists',
@@ -82,6 +84,21 @@ export default {
   methods: {
     log: function (evt) {
       window.console.log(evt)
+      if (evt.added) {
+        console.log('sth is added')
+      } else {
+        console.log('sth is removed')
+      }
+    },
+    add: function (/** Event */evt) {
+    // same properties as onEnd
+      console.log(evt.to)
+      console.log('lalala')
+    },
+    async removeItem (id) {
+      console.log(id)
+      await axios.delete(`api/tasks/${id}`)
+      this.$emit('update')
     }
   }
 }

@@ -13,10 +13,11 @@
     </v-app-bar>
 
     <v-main>
-      <Home :todos.sync="tasksList" />
+      <Home :todos.sync="tasksList"
+      @update="getItems" />
       <create-task-modal
       @close="closeCreateTaskModal"
-      @createNewTask="createNewTask"
+      @createNewTask="addItem"
       :active="isCreateTaskModalOpen"/>
     </v-main>
   </v-app>
@@ -25,6 +26,7 @@
 <script>
 import Home from '@/views/Home'
 import createTaskModal from '@/components/createTaskModal'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -32,15 +34,15 @@ export default {
   data: () => ({
     isCreateTaskModalOpen: false,
     tasksList: [
-      { title: 'Jean', description: 'sth' },
-      { title: 'Gerard', description: 'sth' },
-      { title: 'Joao', description: 'sth' }
+      // { title: 'Jean', description: 'sth' },
+      // { title: 'Gerard', description: 'sth' },
+      // { title: 'Joao', description: 'sth' }
     ]
   }),
+  mounted () {
+    this.getItems()
+  },
   methods: {
-    createTask () {
-      console.log('create')
-    },
     openCreateTaskModal () {
       this.isCreateTaskModalOpen = true
     },
@@ -48,7 +50,26 @@ export default {
       this.isCreateTaskModalOpen = false
     },
     createNewTask (title, description) {
-      this.tasksList.push({ title: title, description: description })
+      this.tasksList.push({
+        title: title,
+        description: description,
+        status: 'todo'
+      })
+    },
+    async addItem (title, description) {
+      const response = await axios.post('api/tasks/', {
+        title: title,
+        description: description,
+        status: 'todo'
+      })
+      this.getItems()
+      // this.items.push(response.data)
+      // this.description = ''
+      console.log(response)
+    },
+    async getItems () {
+      const response = await axios.get('api/tasks/')
+      this.tasksList = response.data
     }
   }
 }
