@@ -13,10 +13,13 @@
     </v-app-bar>
 
     <v-main>
-      <Home :todos.sync="tasksList" />
+      <Home
+      :tasksList.sync="tasksList"
+      @update="getItems"
+       />
       <create-task-modal
       @close="closeCreateTaskModal"
-      @createNewTask="createNewTask"
+      @createNewTask="addItem"
       :active="isCreateTaskModalOpen"/>
     </v-main>
   </v-app>
@@ -25,30 +28,74 @@
 <script>
 import Home from '@/views/Home'
 import createTaskModal from '@/components/createTaskModal'
+import axios from 'axios'
 
 export default {
   name: 'App',
   components: { Home, createTaskModal },
   data: () => ({
     isCreateTaskModalOpen: false,
-    tasksList: [
-      { title: 'Jean', description: 'sth' },
-      { title: 'Gerard', description: 'sth' },
-      { title: 'Joao', description: 'sth' }
-    ]
-  }),
-  methods: {
-    createTask () {
-      console.log('create')
+    tasksList: {
+      todos: [],
+      inProgress: [],
+      blocked: [],
+      done: []
     },
+    tasks: []
+  }),
+  mounted () {
+    this.getItems()
+  },
+  methods: {
     openCreateTaskModal () {
       this.isCreateTaskModalOpen = true
     },
     closeCreateTaskModal () {
       this.isCreateTaskModalOpen = false
     },
-    createNewTask (title, description) {
-      this.tasksList.push({ title: title, description: description })
+    async addItem (title, description) {
+      try {
+        const response = await axios.post('api/tasks/', {
+          title: title,
+          description: description,
+          status: 'todo'
+        })
+        this.tasksList.todos.push(response.data)
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    async getItems () {
+      try {
+        const response = await axios.get('api/tasks/')
+        this.tasks = response.data
+        this.sortTasks()
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    clearTaskList () {
+      this.tasksList = {
+        todos: [],
+        inProgress: [],
+        blocked: [],
+        done: []
+      }
+    },
+    sortTasks () {
+      this.clearTaskList()
+      this.tasks.map(todo => {
+        const status = todo.status
+        if (status === 'todo') {
+          this.tasksList.todos.push(todo)
+        } else if (status === 'inProgress') {
+          this.tasksList.inProgress.push(todo)
+        } else if (status === 'blocked') {
+          this.tasksList.blocked.push(todo)
+        } else if (status === 'done') {
+          this.tasksList.done.push(todo)
+        }
+      })
     }
   }
 }
