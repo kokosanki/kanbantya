@@ -2,10 +2,10 @@
   <div class="ma-10 row d-flex justify-space-between">
     <div class="col-3">
       <h3>Todos</h3>
-      <draggable class="list-group" :list="todos" group="tasks" @change="log">
+      <draggable class="list-group" ref="todos" :list="allTasks.todos" group="tasks" @change="updateItemStatus($event, 'todo')">
         <div
           class="list-group-item"
-          v-for="(element, index) in todos"
+          v-for="(element, index) in allTasks.todos"
           :key="element._id"
         >
           {{ element.title }} {{ index }} {{element.description}}
@@ -16,10 +16,10 @@
 
     <div class="col-3">
       <h3>In progress</h3>
-      <draggable @end="add" class="list-group" :list="inProgress" group="tasks" @change="log">
+      <draggable class="list-group" :list="allTasks.inProgress" group="tasks" @change="updateItemStatus($event, 'inProgress')">
         <div
           class="list-group-item"
-          v-for="(element, index) in inProgress"
+          v-for="(element, index) in allTasks.inProgress"
           :key="element.title"
         >
           {{ element.title }} {{ index }} {{element.description}}
@@ -29,10 +29,10 @@
 
     <div class="col-3">
       <h3>Blocked</h3>
-      <draggable class="list-group" :list="blocked" group="tasks" @change="log">
+      <draggable class="list-group" :list="allTasks.blocked" group="tasks" @change="updateItemStatus($event, 'blocked')">
         <div
           class="list-group-item"
-          v-for="(element, index) in blocked"
+          v-for="(element, index) in allTasks.blocked"
           :key="element.title"
         >
           {{ element.title }} {{ index }} {{element.description}}
@@ -42,10 +42,10 @@
 
     <div class="col-3">
       <h3>Done</h3>
-      <draggable class="list-group" :list="done" group="tasks" @change="log">
+      <draggable class="list-group" :list="allTasks.done" group="tasks" @change="updateItemStatus($event, 'done')">
         <div
           class="list-group-item"
-          v-for="(element, index) in done"
+          v-for="(element, index) in allTasks.done"
           :key="element.title"
         >
           {{ element.title }} {{ index }} {{element.description}}
@@ -63,43 +63,41 @@ export default {
   display: 'Two Lists',
   order: 1,
   props: {
-    todos: {
-      type: Array,
+    tasksList: {
+      type: Object,
       required: true
     }
   },
   components: {
     draggable
   },
-  data () {
-    return {
-      inProgress: [
-      ],
-      blocked: [
-      ],
-      done: [
-      ]
+  computed: {
+    allTasks () {
+      return this.tasksList
     }
   },
   methods: {
-    log: function (evt) {
-      window.console.log(evt)
-      if (evt.added) {
-        console.log('sth is added')
-      } else {
-        console.log('sth is removed')
+    async updateItemStatus (evt, status) {
+      if (evt && evt.added) {
+        const id = evt.added.element._id
+        try {
+          await axios.put(`api/tasks/${id}`, {
+            status: status
+          })
+        } catch (err) {
+          console.error(err)
+        }
       }
     },
-    add: function (/** Event */evt) {
-    // same properties as onEnd
-      console.log(evt.to)
-      console.log('lalala')
-    },
     async removeItem (id) {
-      console.log(id)
-      await axios.delete(`api/tasks/${id}`)
-      this.$emit('update')
+      try {
+        await axios.delete(`api/tasks/${id}`)
+        this.$emit('update', id)
+      } catch (err) {
+        console.err(err)
+      }
     }
+
   }
 }
 </script>
