@@ -12,11 +12,12 @@
         <v-card-text>
           <v-container>
             <v-row>
+              <v-form ref="form" style="width: 100%">
               <v-col
                 cols="12"
               >
                 <v-text-field
-                  :rules="titleRules"
+                  :rules="validationRules.titleRules"
                   required
                   label="Task title"
                   v-model="newTaskTitle"
@@ -26,10 +27,11 @@
               <v-col cols="12">
                 <v-text-field
                   label="Task description"
-                  :rules="descriptionRules"
+                  :rules="validationRules.descriptionRules"
                   v-model="newTaskDescription"
                 ></v-text-field>
               </v-col>
+              </v-form>
             </v-row>
           </v-container>
         </v-card-text>
@@ -69,17 +71,10 @@ export default {
     description: {
       type: String,
       required: false
-    }
-  },
-  data () {
-    return {
-      titleRules: [
-        v => !!v || 'Title is required',
-        v => (v && v.length <= 100) || 'Title must be less than 100 characters'
-      ],
-      descriptionRules: [
-        v => (!v || v.length <= 5000) || 'Description must be less than 5000 characters'
-      ]
+    },
+    validationRules: {
+      type: Object,
+      required: true
     }
   },
   computed: {
@@ -105,8 +100,11 @@ export default {
       this.$emit('close')
     },
     editTask () {
-      this.$emit('editTask', this.newTaskTitle, this.newTaskDescription)
-      this.closeModal()
+      this.$refs.form.validate()
+      if (this.$refs.form.validate()) {
+        this.$emit('editTask', this.newTaskTitle, this.newTaskDescription)
+        this.closeModal()
+      }
     }
   }
 }

@@ -16,11 +16,13 @@
       <Home
       :tasksList.sync="tasksList"
       @update="getItems"
+      :validationRules="validationRules"
        />
       <create-task-modal
       @close="closeCreateTaskModal"
       @createNewTask="addItem"
-      :active="isCreateTaskModalOpen"/>
+      :active="isCreateTaskModalOpen"
+      :validationRules="validationRules" />
     </v-main>
   </v-app>
 </template>
@@ -41,7 +43,16 @@ export default {
       blocked: [],
       done: []
     },
-    tasks: []
+    tasks: [],
+    validationRules: {
+      titleRules: [
+        v => !!v || 'Title is required',
+        v => (v && v.length <= 100) || 'Title must be less than 100 characters'
+      ],
+      descriptionRules: [
+        v => (!v || v.length <= 5000) || 'Description must be less than 5000 characters'
+      ]
+    }
   }),
   mounted () {
     this.getItems()

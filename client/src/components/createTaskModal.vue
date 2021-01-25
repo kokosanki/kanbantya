@@ -12,12 +12,14 @@
         <v-card-text>
           <v-container>
             <v-row>
+              <v-form ref="form" style="width: 100%">
               <v-col
                 cols="12"
               >
                 <v-text-field
                   label="Task title"
                   required
+                  :rules="validationRules.titleRules"
                   v-model="newTaskTitle"
                 ></v-text-field>
               </v-col>
@@ -25,10 +27,11 @@
               <v-col cols="12">
                 <v-text-field
                   label="Task description"
-                  required
+                  :rules="validationRules.descriptionRules"
                   v-model="newTaskDescription"
                 ></v-text-field>
               </v-col>
+              </v-form>
             </v-row>
           </v-container>
         </v-card-text>
@@ -60,6 +63,10 @@ export default {
     active: {
       type: Boolean,
       required: true
+    },
+    validationRules: {
+      type: Object,
+      required: true
     }
   },
   data: () => ({
@@ -71,8 +78,11 @@ export default {
       this.$emit('close')
     },
     createTask () {
-      this.$emit('createNewTask', this.newTaskTitle, this.newTaskDescription)
-      this.closeModal()
+      this.$refs.form.validate()
+      if (this.$refs.form.validate()) {
+        this.$emit('createNewTask', this.newTaskTitle, this.newTaskDescription)
+        this.closeModal()
+      }
     }
   }
 }

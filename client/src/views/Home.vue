@@ -64,7 +64,8 @@
   @close="closeEditTaskModal"
   @editTask="editTask"
   :title.sync="selected.title"
-  :description.sync="selected.description" />
+  :description.sync="selected.description"
+  :validationRules="validationRules" />
   </div>
 </template>
 <script>
@@ -77,6 +78,10 @@ export default {
   order: 1,
   props: {
     tasksList: {
+      type: Object,
+      required: true
+    },
+    validationRules: {
       type: Object,
       required: true
     }
