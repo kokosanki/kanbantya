@@ -16,8 +16,9 @@
                 cols="12"
               >
                 <v-text-field
-                  label="Task title"
+                  :rules="titleRules"
                   required
+                  label="Task title"
                   v-model="newTaskTitle"
                 ></v-text-field>
               </v-col>
@@ -25,7 +26,7 @@
               <v-col cols="12">
                 <v-text-field
                   label="Task description"
-                  required
+                  :rules="descriptionRules"
                   v-model="newTaskDescription"
                 ></v-text-field>
               </v-col>
@@ -70,6 +71,17 @@ export default {
       required: false
     }
   },
+  data () {
+    return {
+      titleRules: [
+        v => !!v || 'Title is required',
+        v => (v && v.length <= 100) || 'Title must be less than 100 characters'
+      ],
+      descriptionRules: [
+        v => (!v || v.length <= 5000) || 'Description must be less than 5000 characters'
+      ]
+    }
+  },
   computed: {
     newTaskTitle: {
       get () {
@@ -99,4 +111,3 @@ export default {
   }
 }
 </script>
-
