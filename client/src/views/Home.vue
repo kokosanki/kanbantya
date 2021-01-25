@@ -7,6 +7,7 @@
           class="list-group-item"
           v-for="(element, index) in allTasks.todos"
           :key="element._id"
+          @click="openEditTaskModal(element)"
         >
           {{ element.title }} {{ index }} {{element.description}}
            <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
@@ -52,10 +53,16 @@
         </div>
       </draggable>
     </div>
-
+  <edit-task-modal
+  :active="isEditTaskModalActive"
+  @close="closeEditTaskModal"
+  @editTask="editTask"
+  :title.sync="selected.title"
+  :description.sync="selected.description" />
   </div>
 </template>
 <script>
+import editTaskModal from '@/components/editTaskModal'
 import draggable from 'vuedraggable'
 import axios from 'axios'
 
@@ -69,7 +76,18 @@ export default {
     }
   },
   components: {
-    draggable
+    draggable,
+    editTaskModal
+  },
+  data () {
+    return {
+      isEditTaskModalActive: false,
+      selected: {
+        id: null,
+        title: null,
+        description: null
+      }
+    }
   },
   computed: {
     allTasks () {
@@ -96,8 +114,35 @@ export default {
       } catch (err) {
         console.err(err)
       }
+    },
+    openEditTaskModal (task) {
+      this.isEditTaskModalActive = true
+      this.selected = {
+        id: task._id,
+        title: task.title,
+        description: task.description
+      }
+    },
+    closeEditTaskModal () {
+      this.isEditTaskModalActive = false
+      this.selected = {
+        id: null,
+        title: null,
+        description: null
+      }
+    },
+    async editTask (title, description) {
+      const id = this.selected.id
+      try {
+        await axios.put(`api/tasks/${id}`, {
+          title: title,
+          description: description
+        })
+      } catch (err) {
+        console.error(err)
+      }
+      this.$emit('update')
     }
-
   }
 }
 </script>
