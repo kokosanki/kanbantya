@@ -24,6 +24,7 @@
           :key="element.title"
         >
           {{ element.title }} {{element.description}}
+           <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
         </div>
       </draggable>
     </div>
@@ -37,6 +38,7 @@
           :key="element.title"
         >
           {{ element.title }} {{element.description}}
+           <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
         </div>
       </draggable>
     </div>
@@ -50,6 +52,7 @@
           :key="element.title"
         >
           {{ element.title }} {{element.description}}
+           <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
         </div>
       </draggable>
     </div>
