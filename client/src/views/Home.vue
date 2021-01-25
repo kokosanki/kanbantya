@@ -22,6 +22,7 @@
           class="list-group-item"
           v-for="(element) in allTasks.inProgress"
           :key="element.title"
+          @click="openEditTaskModal(element)"
         >
           {{ element.title }} {{element.description}}
            <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
@@ -36,6 +37,7 @@
           class="list-group-item"
           v-for="(element) in allTasks.blocked"
           :key="element.title"
+          @click="openEditTaskModal(element)"
         >
           {{ element.title }} {{element.description}}
            <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
@@ -50,6 +52,7 @@
           class="list-group-item"
           v-for="(element) in allTasks.done"
           :key="element.title"
+          @click="openEditTaskModal(element)"
         >
           {{ element.title }} {{element.description}}
            <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
