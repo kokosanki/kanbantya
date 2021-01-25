@@ -5,11 +5,11 @@
       <draggable class="list-group" ref="todos" :list="allTasks.todos" group="tasks" @change="updateItemStatus($event, 'todo')">
         <div
           class="list-group-item"
-          v-for="(element, index) in allTasks.todos"
+          v-for="(element) in allTasks.todos"
           :key="element._id"
           @click="openEditTaskModal(element)"
         >
-          {{ element.title }} {{ index }} {{element.description}}
+          {{ element.title }} {{element.description}}
            <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
         </div>
       </draggable>
@@ -20,10 +20,10 @@
       <draggable class="list-group" :list="allTasks.inProgress" group="tasks" @change="updateItemStatus($event, 'inProgress')">
         <div
           class="list-group-item"
-          v-for="(element, index) in allTasks.inProgress"
+          v-for="(element) in allTasks.inProgress"
           :key="element.title"
         >
-          {{ element.title }} {{ index }} {{element.description}}
+          {{ element.title }} {{element.description}}
         </div>
       </draggable>
     </div>
@@ -33,10 +33,10 @@
       <draggable class="list-group" :list="allTasks.blocked" group="tasks" @change="updateItemStatus($event, 'blocked')">
         <div
           class="list-group-item"
-          v-for="(element, index) in allTasks.blocked"
+          v-for="(element) in allTasks.blocked"
           :key="element.title"
         >
-          {{ element.title }} {{ index }} {{element.description}}
+          {{ element.title }} {{element.description}}
         </div>
       </draggable>
     </div>
@@ -46,10 +46,10 @@
       <draggable class="list-group" :list="allTasks.done" group="tasks" @change="updateItemStatus($event, 'done')">
         <div
           class="list-group-item"
-          v-for="(element, index) in allTasks.done"
+          v-for="(element) in allTasks.done"
           :key="element.title"
         >
-          {{ element.title }} {{ index }} {{element.description}}
+          {{ element.title }} {{element.description}}
         </div>
       </draggable>
     </div>
