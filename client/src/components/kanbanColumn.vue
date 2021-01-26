@@ -47,7 +47,7 @@ export default {
   computed: {
     displayedName() {
       switch (this.name) {
-        case 'todo':
+        case 'todos':
           return 'Todo'
         case 'inProgress':
           return 'In Progress'

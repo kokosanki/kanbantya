@@ -84,7 +84,7 @@ export default {
         const response = await axios.post('api/tasks/', {
           title: title,
           description: description,
-          status: 'todo'
+          status: 'todos'
         })
         this.tasksList.todos.push(response.data)
       } catch (err) {
@@ -112,7 +112,7 @@ export default {
       this.clearTaskList()
       this.tasks.map((todo) => {
         const status = todo.status
-        if (status === 'todo') {
+        if (status === 'todos') {
           this.tasksList.todos.push(todo)
         } else if (status === 'inProgress') {
           this.tasksList.inProgress.push(todo)
