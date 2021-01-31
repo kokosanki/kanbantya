@@ -61,7 +61,7 @@ export default {
     tasks: [],
     validationRules: {
       titleRules: [
-        (v) => !!v || 'Title is required',
+        (v) => (v && !!v.trim()) || 'Title is required',
         (v) => (v && v.length <= 100) || 'Title must be less than 100 characters'
       ],
       descriptionRules: [
