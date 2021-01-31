@@ -1,85 +1,49 @@
 <template>
   <div class="ma-10 row d-flex justify-space-between">
-    <div class="col-3">
-      <h3>Todos</h3>
-      <draggable class="list-group" ref="todos" :list="allTasks.todos" group="tasks" @change="updateItemStatus($event, 'todo')">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in allTasks.todos"
-          :key="element._id"
-          @click="openEditTaskModal(element)"
-        >
-          {{ element.title }} {{ index }} {{element.description}}
-           <v-icon @click="removeItem(element._id)">mdi-close</v-icon>
-        </div>
-      </draggable>
-    </div>
+    <kanban-column
+      v-for="(tasks, key, index) in allTasks"
+      :key="index"
+      :name="key"
+      :tasks="tasks"
+      @openEditTaskModal="openEditTaskModal"
+      @updateItemStatus="updateItemStatus"
+      @removeItem="removeItem"
+    />
 
-    <div class="col-3">
-      <h3>In progress</h3>
-      <draggable class="list-group" :list="allTasks.inProgress" group="tasks" @change="updateItemStatus($event, 'inProgress')">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in allTasks.inProgress"
-          :key="element.title"
-        >
-          {{ element.title }} {{ index }} {{element.description}}
-        </div>
-      </draggable>
-    </div>
-
-    <div class="col-3">
-      <h3>Blocked</h3>
-      <draggable class="list-group" :list="allTasks.blocked" group="tasks" @change="updateItemStatus($event, 'blocked')">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in allTasks.blocked"
-          :key="element.title"
-        >
-          {{ element.title }} {{ index }} {{element.description}}
-        </div>
-      </draggable>
-    </div>
-
-    <div class="col-3">
-      <h3>Done</h3>
-      <draggable class="list-group" :list="allTasks.done" group="tasks" @change="updateItemStatus($event, 'done')">
-        <div
-          class="list-group-item"
-          v-for="(element, index) in allTasks.done"
-          :key="element.title"
-        >
-          {{ element.title }} {{ index }} {{element.description}}
-        </div>
-      </draggable>
-    </div>
-  <edit-task-modal
-  :active="isEditTaskModalActive"
-  @close="closeEditTaskModal"
-  @editTask="editTask"
-  :title.sync="selected.title"
-  :description.sync="selected.description" />
+    <edit-task-modal
+      v-if="isEditTaskModalActive"
+      :active="isEditTaskModalActive"
+      :title.sync="selected.title"
+      :description.sync="selected.description"
+      :validation-rules="validationRules"
+      @close="closeEditTaskModal"
+      @editTask="editTask"
+    />
   </div>
 </template>
 <script>
 import editTaskModal from '@/components/editTaskModal'
-import draggable from 'vuedraggable'
+import kanbanColumn from '@/components/kanbanColumn'
 import axios from 'axios'
 
 export default {
   display: 'Two Lists',
   order: 1,
+  components: {
+    editTaskModal,
+    kanbanColumn
+  },
   props: {
     tasksList: {
       type: Object,
       required: true
+    },
+    validationRules: {
+      type: Object,
+      required: true
     }
   },
-  components: {
-    draggable,
-    editTaskModal
-  },
-  data () {
+  data() {
     return {
       isEditTaskModalActive: false,
       selected: {
@@ -90,12 +54,12 @@ export default {
     }
   },
   computed: {
-    allTasks () {
+    allTasks() {
       return this.tasksList
     }
   },
   methods: {
-    async updateItemStatus (evt, status) {
+    async updateItemStatus(evt, status) {
       if (evt && evt.added) {
         const id = evt.added.element._id
         try {
@@ -107,7 +71,7 @@ export default {
         }
       }
     },
-    async removeItem (id) {
+    async removeItem(id) {
       try {
         await axios.delete(`api/tasks/${id}`)
         this.$emit('update', id)
@@ -115,7 +79,7 @@ export default {
         console.err(err)
       }
     },
-    openEditTaskModal (task) {
+    openEditTaskModal(task) {
       this.isEditTaskModalActive = true
       this.selected = {
         id: task._id,
@@ -123,7 +87,7 @@ export default {
         description: task.description
       }
     },
-    closeEditTaskModal () {
+    closeEditTaskModal() {
       this.isEditTaskModalActive = false
       this.selected = {
         id: null,
@@ -131,7 +95,7 @@ export default {
         description: null
       }
     },
-    async editTask (title, description) {
+    async editTask(title, description) {
       const id = this.selected.id
       try {
         await axios.put(`api/tasks/${id}`, {

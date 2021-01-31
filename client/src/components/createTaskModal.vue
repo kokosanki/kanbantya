@@ -12,28 +12,34 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col
-                cols="12"
+              <v-form
+                ref="form"
+                style="width: 100%"
               >
-                <v-text-field
-                  label="Task title"
-                  required
-                  v-model="newTaskTitle"
-                ></v-text-field>
-              </v-col>
+                <v-col
+                  cols="12"
+                >
+                  <v-text-field
+                    v-model="newTaskTitle"
+                    label="Task title"
+                    required
+                    :rules="validationRules.titleRules"
+                  />
+                </v-col>
 
-              <v-col cols="12">
-                <v-text-field
-                  label="Task description"
-                  required
-                  v-model="newTaskDescription"
-                ></v-text-field>
-              </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newTaskDescription"
+                    label="Task description"
+                    :rules="validationRules.descriptionRules"
+                  />
+                </v-col>
+              </v-form>
             </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
             color="primary"
             text
@@ -60,6 +66,10 @@ export default {
     active: {
       type: Boolean,
       required: true
+    },
+    validationRules: {
+      type: Object,
+      required: true
     }
   },
   data: () => ({
@@ -67,17 +77,18 @@ export default {
     newTaskDescription: null
   }),
   methods: {
-    closeModal () {
+    closeModal() {
       this.$emit('close')
     },
-    createTask () {
-      this.$emit('createNewTask', this.newTaskTitle, this.newTaskDescription)
-      this.closeModal()
+    createTask() {
+      this.$refs.form.validate()
+      if (this.$refs.form.validate()) {
+        this.$emit('createNewTask', this.newTaskTitle, this.newTaskDescription)
+        this.closeModal()
+      }
     }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
