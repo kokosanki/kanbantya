@@ -81,6 +81,13 @@ module.exports = {
     parser: 'babel-eslint'
   },
   rules: {
+    'space-before-function-paren': [
+      2,
+      {
+        anonymous: 'never',
+        named: 'never'
+      }
+    ],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'prettier-vue/prettier': [
