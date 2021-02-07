@@ -7,7 +7,6 @@
       :tasks="tasks"
       @openEditTaskModal="openEditTaskModal"
       @updateItemStatus="updateItemStatus"
-      @removeItem="removeItem"
     />
 
     <edit-task-modal
@@ -18,6 +17,7 @@
       :validation-rules="validationRules"
       @close="closeEditTaskModal"
       @editTask="editTask"
+      @removeItem="removeItem"
     />
   </div>
 </template>
@@ -71,7 +71,8 @@ export default {
         }
       }
     },
-    async removeItem(id) {
+    async removeItem() {
+      const id = this.selected.id
       try {
         await axios.delete(`api/tasks/${id}`)
         this.$emit('update', id)

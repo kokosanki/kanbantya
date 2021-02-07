@@ -13,15 +13,9 @@
         class="list-group-item"
         @click="openEditTaskModal(element)"
       >
-        {{ element.title }}
-        <br>
-        {{ element.description }}
-        <v-icon
-          class="delete-icon"
-          @click="removeItem(element._id)"
-        >
-          mdi-close
-        </v-icon>
+        <h3>
+          {{ element.title }}
+        </h3>
       </div>
     </draggable>
   </div>
@@ -64,9 +58,6 @@ export default {
     },
     updateItemStatus(event) {
       this.$emit('updateItemStatus', event, this.name)
-    },
-    removeItem(id) {
-      this.$emit('removeItem', id)
     }
   }
 }
@@ -87,8 +78,5 @@ export default {
 }
 .list-group-item:active {
   cursor: grabbing;
-}
-.delete-icon:hover {
-  background-color: magenta;
 }
 </style>
