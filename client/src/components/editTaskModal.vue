@@ -6,12 +6,33 @@
       max-width="600px"
     >
       <v-card>
-        <v-card-title>
-          <span class="headline">Edit the task</span>
-        </v-card-title>
+        <div
+          style="width: 100%"
+          class="px-9 py-6 d-flex justify-space-between"
+        >
+          <v-card-title class="pa-0">
+            <span class="headline">{{ modalMessage }}</span>
+          </v-card-title>
+          <v-btn
+            text
+            icon
+            color="primary"
+            class="modal-icon ma-2"
+            @click="isDeleteModeOn ? deleteModeOff() : deleteModeOn()"
+          >
+            <v-icon>
+              {{ modalIcon }}
+            </v-icon>
+          </v-btn>
+        </div>
         <v-card-text>
           <v-container>
-            <v-row>
+            <div v-if="isDeleteModeOn">
+              <h2 class="subtitle-1">
+                Are you sure that you want to delete this task?
+              </h2>
+            </div>
+            <v-row v-else>
               <v-form
                 ref="form"
                 style="width: 100%"
@@ -50,9 +71,9 @@
           <v-btn
             color="primary"
             text
-            @click="editTask"
+            @click="isDeleteModeOn ? removeItem() : editTask()"
           >
-            Edit
+            {{ buttonText }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -80,6 +101,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      isDeleteModeOn: false
+    }
+  },
   computed: {
     newTaskTitle: {
       get() {
@@ -96,6 +122,15 @@ export default {
       set(newVal) {
         this.$emit('update:description', newVal)
       }
+    },
+    modalMessage() {
+      return this.isDeleteModeOn ? 'Delete the task' : 'Edit the task'
+    },
+    modalIcon() {
+      return this.isDeleteModeOn ? 'mdi-keyboard-backspace' : 'mdi-delete'
+    },
+    buttonText() {
+      return this.isDeleteModeOn ? 'Delete' : 'Edit'
     }
   },
   methods: {
@@ -108,6 +143,16 @@ export default {
         this.$emit('editTask', this.newTaskTitle, this.newTaskDescription)
         this.closeModal()
       }
+    },
+    removeItem() {
+      this.$emit('removeItem')
+      this.closeModal()
+    },
+    deleteModeOn() {
+      this.isDeleteModeOn = true
+    },
+    deleteModeOff() {
+      this.isDeleteModeOn = false
     }
   }
 }
