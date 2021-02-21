@@ -1,6 +1,8 @@
 <template>
   <div class="list-group">
-    <h3 class="mb-3">{{ displayedName }}</h3>
+    <h3 class="mb-3">
+      {{ displayedName }}
+    </h3>
     <draggable
       ref="todos"
       :list="tasks"
