@@ -1,5 +1,5 @@
 <template>
-  <div class="ma-10 row d-flex justify-space-between">
+  <div class="kanban d-flex justify-space-between">
     <kanban-column
       v-for="(tasks, key, index) in allTasks"
       :key="index"
@@ -111,15 +111,11 @@ export default {
   }
 }
 </script>
-<style>
-.list-group-item {
-  cursor: pointer;
-  border-radius: 5%;
-  padding: 5px;
-  margin-bottom: 5px;
-  background-color: pink;
-}
-.list-group-item:active {
-  cursor: grabbing;
+<style lang="scss">
+.kanban {
+  flex-direction: column;
+  .list-group-item:active {
+    cursor: grabbing;
+  }
 }
 </style>
