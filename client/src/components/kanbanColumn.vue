@@ -1,6 +1,6 @@
 <template>
   <div class="list-group">
-    <h3>{{ displayedName }}</h3>
+    <h3 class="mb-3">{{ displayedName }}</h3>
     <draggable
       ref="todos"
       :list="tasks"
@@ -65,18 +65,38 @@ export default {
 
 <style>
 .list-group {
-  width: 25%;
-  border: 2px solid magenta;
+  width: 100%;
+  background-color: #ceb8ff;
+  padding: 15px;
+  min-height: calc(25vh - 14px);
+}
+
+.list-group:nth-child(odd) {
+  background-color: #fc659f;
 }
 .list-group-item {
   width: 100%;
   cursor: pointer;
-  border-radius: 5%;
-  padding: 5px;
-  margin-bottom: 5px;
-  background-color: pink;
+  border-radius: 5px !important;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #ffe6f2;
 }
 .list-group-item:active {
   cursor: grabbing;
+}
+
+@media only screen and (min-width: 900px) {
+  .kanban {
+    flex-direction: row !important;
+  }
+  .list-group {
+    height: calc(100vh - 56px);
+    background-color: unset !important;
+    border-right: 2px solid #311b92;
+  }
+  .list-group:last-of-type {
+    border-right: none;
+  }
 }
 </style>

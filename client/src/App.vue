@@ -18,10 +18,10 @@
       <v-spacer />
       <v-btn
         color="secondary"
-        class="primary--text font-weight-black"
+        class="primary--text font-weight-black px-2"
         @click="openCreateTaskModal"
       >
-        Create a task
+        Create
       </v-btn>
     </v-app-bar>
 
